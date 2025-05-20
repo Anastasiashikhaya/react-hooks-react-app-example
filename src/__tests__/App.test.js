@@ -1,37 +1,27 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import { format } from "date-fns";
 import App from "../components/App";
 
-beforeEach(() => {
-  render(<App />);
+describe("App Component", () => {
+  beforeEach(() => {
+    render(<App />);
+  });
+
+  test('displays "Now" in the header instead of a time', () => {
+    // Check that time string is NOT present
+    const timeRegex = /\w+ \d{1,2}\w{2} \d{4}, \d{1,2}:\d{2}:\d{2} [AP]M/;
+    expect(screen.queryByText(timeRegex)).not.toBeInTheDocument();
+
+    // Check that "Now" is present
+    expect(screen.getByRole("heading", { name: /now/i })).toBeInTheDocument();
+  });
+
+  test("renders the ExampleComponent", () => {
+    expect(screen.getByText("Whoa!")).toBeInTheDocument();
+    expect(screen.getByAltText("time video")).toBeInTheDocument();
+  });
+
+  test("renders the TestComponent", () => {
+    expect(screen.getByTitle("time video")).toBeInTheDocument();
+  });
 });
-
-test('should include "Now" in the header instead of a time', () => {
-  expect(
-    screen.queryByText(format(new Date(), "MMMM do yyyy, h:mm:ss a"))
-  ).not.toBeInTheDocument();
-  expect(screen.queryByText(/Now/g)).toBeInTheDocument();
-});
-
-test("should include the <ExampleComponent />", () => {
-  expect(screen.queryByText("Whoa!")).toBeInTheDocument();
-});
-
-test("should include the <TestComponent />", () => {
-  expect(screen.queryByTitle("time video")).toBeInTheDocument();
-});
-
-//   it('should include "Now" in the header instead of a time', () => {
-//     expect(wrapper.find('header').text()).to.not.include(moment().format('MMMM Do YYYY'))
-//     expect(wrapper.find('header').text()).to.include('Now')
-//   });
-
-//   it('should include the ExampleComponent', () => {
-//     expect(wrapper.text()).to.include('<ExampleComponent />')
-//   });
-
-//   it('should include the TestComponent', () => {
-//     expect(wrapper.text()).to.include('<TestComponent />')
-//   });
-// });
